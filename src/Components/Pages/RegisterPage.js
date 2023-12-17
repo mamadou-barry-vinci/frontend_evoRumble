@@ -1,95 +1,115 @@
-import { getRememberMe, setAuthenticatedUser, setRememberMe } from '../../utils/auths';
-import { clearPage, renderPageTitle } from '../../utils/render';
-import Navbar from '../Navbar/Navbar';
 import Navigate from '../Router/Navigate';
+import {setAuthenticatedUser}from '../../utils/auths';
+import Navbar from "../Navbar/Navbar";
 
-const RegisterPage = () => {
-  clearPage();
-  renderPageTitle('Register');
-  renderRegisterForm();
+
+const main = document.querySelector('main');
+
+const Register = () => {
+  main.innerHTML = `<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+
+              <div class="mb-md-5 mt-md-4 pb-5">
+  
+                <h2 class="fw-bold mb-2 text-uppercase">S'inscrire</h2>
+                <p class="text-white-50 mb-5">Choisissez un pseudo et un mot de passe !</p>
+
+                <form id="registerform" >
+  
+                <div class="form-outline form-white mb-4">
+                  <input type="text" id="registerUsername" class="form-control form-control-lg" placeholder="Pseudo" />
+                </div>
+  
+                <div class="form-outline form-white mb-4">
+                  <input type="password" id="registerPassword" class="form-control form-control-lg" placeholder="Mot de passe"" />
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                <input type="password" id="registerCPassword" class="form-control form-control-lg" placeholder="Confirmer mot de passe"" />
+                </div>
+
+                <button class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  `;
+  const formRegister = document.querySelector('form');
+  formRegister.addEventListener('submit', addUsers);
 };
-
-function renderRegisterForm() {
-  const main = document.querySelector('main');
-  const form = document.createElement('form');
-  form.className = 'p-5';
-  const username = document.createElement('input');
-  username.type = 'text';
-  username.id = 'username';
-  username.placeholder = 'username';
-  username.required = true;
-  username.className = 'form-control mb-3';
-  const password = document.createElement('input');
-  password.type = 'password';
-  password.id = 'password';
-  password.required = true;
-  password.placeholder = 'password';
-  password.className = 'form-control mb-3';
-  const submit = document.createElement('input');
-  submit.value = 'Register';
-  submit.type = 'submit';
-  submit.className = 'btn btn-info';
-  const formCheckWrapper = document.createElement('div');
-  formCheckWrapper.className = 'mb-3 form-check';
-
-  const rememberme = document.createElement('input');
-  rememberme.type = 'checkbox';
-  rememberme.className = 'form-check-input';
-  rememberme.id = 'rememberme';
-  const remembered = getRememberMe();
-  rememberme.checked = remembered;
-  rememberme.addEventListener('click', onCheckboxClicked);
-
-  const checkLabel = document.createElement('label');
-  checkLabel.htmlFor = 'rememberme';
-  checkLabel.className = 'form-check-label';
-  checkLabel.textContent = 'Remember me';
-
-  formCheckWrapper.appendChild(rememberme);
-  formCheckWrapper.appendChild(checkLabel);
-
-  form.appendChild(username);
-  form.appendChild(password);
-  form.appendChild(formCheckWrapper);
-  form.appendChild(submit);
-  main.appendChild(form);
-  form.addEventListener('submit', onRegister);
-}
-
-function onCheckboxClicked(e) {
-  setRememberMe(e.target.checked);
-}
-
-async function onRegister(e) {
+async function addUsers(e) {
   e.preventDefault();
-
-  const username = document.querySelector('#username').value;
-  const password = document.querySelector('#password').value;
+  const username = document.querySelector('#registerUsername').value;
+  const password = document.querySelector('#registerPassword').value;
+  const passwordC = document.querySelector('#registerCPassword').value;
 
   const options = {
     method: 'POST',
-    body: JSON.stringify({
-      username,
-      password,
-    }),
+    body: JSON.stringify({ username, password, passwordC }),
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const response = await fetch(`${process.env.API_BASE_URL}/auths/register`, options);
+  const response = await fetch(`/api/auths/register`, options);
 
-  if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
+  if (!response.ok) {
+    main.innerHTML = `<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+  
+              <div class="mb-md-5 mt-md-4 pb-5">
+  
+                <h2 class="fw-bold mb-2 text-uppercase">S'inscrire</h2>
+                <p class="text-white-50 mb-5">Choisissez un pseudo et un mot de passe !</p>
 
+                <form id="registerform" >
+  
+                <div class="form-outline form-white mb-4">
+                  <input type="text" id="registerUsername" class="form-control form-control-lg" placeholder="Pseudo" />
+                </div>
+  
+                <div class="form-outline form-white mb-4">
+                  <input type="password" id="registerPassword" class="form-control form-control-lg" placeholder="Mot de passe"" />
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                <input type="password" id="registerCPassword" class="form-control form-control-lg" placeholder="Confirmer mot de passe"" />
+              </div>
+  
+                <button class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
+                <br></br>
+                
+
+                <div class="alert alert-danger text-danger" role="alert">
+                Error in the registration
+              </div>
+                
+            </form>
+              </div
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+    throw new Error(`Petit Soucis : ${response.status} : ${response.statusText}`);
+  }
   const authenticatedUser = await response.json();
-
-  console.log('Newly registered & authenticated user : ', authenticatedUser);
-
   setAuthenticatedUser(authenticatedUser);
 
   Navbar();
+  Navigate('/')}
 
-  Navigate('/');
-}
-
-export default RegisterPage;
+export default Register;

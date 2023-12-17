@@ -1,96 +1,115 @@
-import { getRememberMe, setAuthenticatedUser, setRememberMe } from '../../utils/auths';
-import { clearPage, renderPageTitle } from '../../utils/render';
-import Navbar from '../Navbar/Navbar';
-import Navigate from '../Router/Navigate';
+import Navigate from "../Router/Navigate";
+import Navbar from "../Navbar/Navbar";
+import {setAuthenticatedUser}from '../../utils/auths'
 
-const LoginPage = () => {
-  clearPage();
-  renderPageTitle('Login');
-  renderRegisterForm();
-};
+const main = document.querySelector('main');
 
-function renderRegisterForm() {
-  const main = document.querySelector('main');
-  const form = document.createElement('form');
-  form.className = 'p-5';
-  const username = document.createElement('input');
-  username.type = 'text';
-  username.id = 'username';
-  username.placeholder = 'username';
-  username.required = true;
-  username.className = 'form-control mb-3';
-  const password = document.createElement('input');
-  password.type = 'password';
-  password.id = 'password';
-  password.required = true;
-  password.placeholder = 'password';
-  password.className = 'form-control mb-3';
-  const submit = document.createElement('input');
-  submit.value = 'Login';
-  submit.type = 'submit';
-  submit.className = 'btn btn-info';
+const Login = () => {
+    main.innerHTML = `<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+  
+              <div class="mb-md-5 mt-md-4 pb-5">
+  
+                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                <p class="text-white-50 mb-5">Entrez votre pseudo et votre mot de passe !</p>
+                
+                <form id="connectForm">
 
-  const formCheckWrapper = document.createElement('div');
-  formCheckWrapper.className = 'mb-3 form-check';
-
-  const rememberme = document.createElement('input');
-  rememberme.type = 'checkbox';
-  rememberme.className = 'form-check-input';
-  rememberme.id = 'rememberme';
-  const remembered = getRememberMe();
-  rememberme.checked = remembered;
-  rememberme.addEventListener('click', onCheckboxClicked);
-
-  const checkLabel = document.createElement('label');
-  checkLabel.htmlFor = 'rememberme';
-  checkLabel.className = 'form-check-label';
-  checkLabel.textContent = 'Remember me';
-
-  formCheckWrapper.appendChild(rememberme);
-  formCheckWrapper.appendChild(checkLabel);
-
-  form.appendChild(username);
-  form.appendChild(password);
-  form.appendChild(formCheckWrapper);
-  form.appendChild(submit);
-  main.appendChild(form);
-  form.addEventListener('submit', onLogin);
+                <div class="form-outline form-white mb-4">
+                  <input type="text" id="connectUsername" class="form-control form-control-lg" placeholder="Pseudo" />
+                </div>
+  
+                <div class="form-outline form-white mb-4">
+                  <input type="password" id="connectPassword" class="form-control form-control-lg" placeholder="Mot de passe"" />
+                </div>
+  
+                <button class="btn btn-outline-light btn-lg px-5" type="submit" id="submit">Login</button>
+                
+                </form>
+              </div>
+              <div>
+                <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a>
+                </p>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+  
+  const form = document.querySelector('#connectForm');
+  form.addEventListener("submit", getUser)
 }
+  async function getUser (e){
+    e.preventDefault();
+    const username = document.querySelector('#connectUsername').value;
+    const password = document.querySelector('#connectPassword').value;
+    
+     const url = `/api/auths/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
-function onCheckboxClicked(e) {
-  setRememberMe(e.target.checked);
-}
+     const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+     };
+     
+    const response = await fetch(url, options);
+  
+    if (!response.ok) {
+      main.innerHTML = `<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+  
+              <div class="mb-md-5 mt-md-4 pb-5">
+  
+                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                <p class="text-white-50 mb-5">Entrez votre pseudo et votre mot de passe !</p>
+                
+                <form id="connectForm">
 
-async function onLogin(e) {
-  e.preventDefault();
-
-  const username = document.querySelector('#username').value;
-  const password = document.querySelector('#password').value;
-
-  const options = {
-    method: 'POST',
-    body: JSON.stringify({
-      username,
-      password,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+                <div class="form-outline form-white mb-4">
+                  <input type="text" id="connectUserName" class="form-control form-control-lg" placeholder="Pseudo" />
+                </div>
+  
+                <div class="form-outline form-white mb-4">
+                  <input type="password" id="connectPassword" class="form-control form-control-lg" placeholder="Mot de passe"" />
+                </div>
+  
+                <button class="btn btn-outline-light btn-lg px-5" type="submit" id="submit">Login</button>
+                
+                </form>
+              </div>
+              <div>
+                <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a>
+                </p>
+              </div>
+              <div class="alert alert-danger text-danger" role="alert">
+                  Error in the connection
+                </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+    throw new Error(`Petit Soucis : ${response.status } : ${response.statusText}`)
   };
-
-  const response = await fetch(`${process.env.API_BASE_URL}/auths/login`, options);
-
-  if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
-
   const authenticatedUser = await response.json();
-
-  console.log('Authenticated user : ', authenticatedUser);
-
   setAuthenticatedUser(authenticatedUser);
-
   Navbar();
-
-  Navigate('/');
-}
-
-export default LoginPage;
+  Navigate('/')
+};
+  
+  
+  export default Login;

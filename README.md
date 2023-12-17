@@ -1,6 +1,6 @@
-# Boilerplate pour vos applications modernes utilisant Webpack, offrant l'authentification et le déploiement sur GitHub Pages
-## How to use ?
-- Si vous ne l'avez pas fait, vous pouvez cloner le repo associé au boilerplate pour initier votre application : `git clone https://github.com/e-vinci/js-frontend-boilerplate.git` ou `git clone https://github.com/e-vinci/js-frontend-boilerplate.git nom-de-votre-projet` pour créer votre projet nommé `nom-de-votre-projet`.
+# Boilerplate pour vos applications modernes utilisant Webpack, Phaser (Jeux en 2D) et un routeur
+# How to use ?
+- Si vous ne l'avez pas fait, vous pouvez cloner le repo associé au boilerplate pour initier votre application : `git clone https://github.com/e-vinci/js-router-boilerplate.git` ou `git clone https://github.com/e-vinci/js-router-boilerplate.git nom-de-votre-projet` pour créer votre projet nommé `nom-de-votre-projet`.
 - **package.json** est le fichier de configuration de votre projet. Veuillez le mettre à jour afin de :
     - donnnez un nom à votre projet & une description ;
     - vous identifier comme auteur.
@@ -17,6 +17,7 @@ cd nom-de-votre-projet # (le nom donné au répertoire de votre projet)
 npm i # (equivalent de npm install)
 npm start
 ```
+
 ## Comment configurer l'URL de base vers votre API et utiliser cette URL
 - Dans **webpack.config**, veuillez configurer l'URL de votre API en fonction du **build mode** :
     - **`DEVELOPMENT_API_BASE_URL`** : laissez **'/api'** si vous souhaitez utiliser le proxy pour appeler votre api ou **http://localhost:3000** si vous préférez appeler directement l'API. Dans ce dernier cas, vous devez avoir autorisé l'origine de votre frontend (**http://localhost:8080**) via les CORS. 
@@ -74,7 +75,6 @@ npm run deploy
 - Imaginez que l'utilisateur fasse un refresh à l'URL **https://[username].github.io/my-super-frontend/login**. GitHub Pages est juste un CDN, un serveur de fichiers statiques. Il n'y a pas de fichier qui correspond à cette URL ! Dès lors, sans un boilerplate bien configuré, vous recevriez une **erreur 404** 😨 !
 - Lors du build, ce boilerplate créer un fichier **404.html** qui est identique à **index.html**. Ainsi, lorsqu'une ressource n'existe pas, GitHub Page renverra le contenu de 404.html, et ça sera donc notre SPA sera entièrement fonctionnelle, même en cas de refresh 😅 !
 
-
 ## Utilisation du linter et du formater
 - Pour bénéficier de feedback sur le code lors de son écriture, par rapport au respect du style 
 des règles d'Airbnb, vous devez avoir installé l'extension **ESLint** au sein de VS Code. 
@@ -95,14 +95,11 @@ Pour plus d'info sur un package, ou pour trouver un package traitant d'un sujet 
 
 ## Utilisation d'assets (images, fonts, CSS...)
 - Attention, quand vous utilisez des assets au sein de votre application, comme des images, l'URL d'un asset après le build de votre application n'est pas la même qu'avant le build. 
-- Pour bien gérer les URL au sein de votre JavaScript, vous devez d'abord importer vos assets. Voici un exemple pour ajouter une image dynamiquement au sein d'un footer : 
+- Pour bien gérer les URL au sein de votre JavaScript, vous devez d'abord importer vos assets. Vous trouverez un exemple de comment ajouter des assets à une scène de jeux dans `/Components/Game/GameScene.js` : 
 ```javascript
-import logo from '.src/img/icon.png';
-const footerPhoto = new Image(); // or document.createElement('img');
-footerPhoto.src = logo;
-footerPhoto.height = 50;
-const footer = document.querySelector("footer");
-footer.appendChild(footerPhoto);
+import starAsset from "../../assets/star.png";
+// ...
+this.load.image("sky", skyAsset); // l'URL de star.png sera la bonne lors du build
 ```
 - Plus d'information sur la gestion des assets via Webpack : https://webpack.js.org/guides/asset-management/ 
 
@@ -139,4 +136,6 @@ const routes = {
 - L'utilisation de ce boilerplate permet d'avoir un serveur de développement hyper performant, de développer avec beaucoup de confort, de faciliter la structure d'un projet, de gérer les dépendances, de transformer les assets de manière centralisée, ...
 
 # Resources
+- Pour information, la source de la configuration de Webpack provient principalement de [Phaser 3 Webpack Project Template](https://github.com/photonstorm/phaser3-project-template).  
+Le jeu présenté dans le boilerplate est basé sur le tutoriel nommé [Modern JavaScript Phaser 3 Tutorial : Part 1 to Part 5](https://blog.ourcade.co/posts/2020/make-first-phaser-3-game-modern-javascript-part1/) et utilise Webpack au lieu de Parcel comme module bundler.
 - favicon : https://upload.wikimedia.org/wikipedia/commons/3/3e/AIGA_information.svg, AIGA (American Institute of Graphic Arts)
