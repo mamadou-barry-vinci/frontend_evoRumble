@@ -111,7 +111,7 @@ async function creationParties() {
   clearGameState();
 
   try {
-    const response = await fetch('/api/evoRumble');
+    const response = await fetch(`${process.env.API_BASE_URL}/evoRumble`);
 
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 
@@ -174,7 +174,7 @@ function teamCreation(monsterAndAttack) {
 async function getUserScore() {
   try {
     const response = await fetch(
-      `/api/score/getScore?username=${encodeURIComponent(authenticatedUser?.username)}`,
+      `${process.env.API_BASE_URL}/score/getScore?username=${encodeURIComponent(authenticatedUser?.username)}`,
     );
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 
@@ -197,7 +197,7 @@ async function updateUserScore(username, score) {
       },
     };
 
-    const response = await fetch(`/api/score/updateScore`, options);
+    const response = await fetch(`${process.env.API_BASE_URL}/score/updateScore`, options);
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 
     const data = await response.json();

@@ -21,7 +21,7 @@ const ProfilPage = async () =>{
 
 async function getLeaderboard() {
   try {
-    const response = await fetch('/api/score/leaderboard');
+    const response = await fetch(`${process.env.API_BASE_URL}/score/leaderboard`);
     if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 
     const data = await response.json();
@@ -36,7 +36,7 @@ async function getUserScore(authUser) {
     if(isAuthenticated){
         try {
             const response = await fetch(
-              `/api/score/getScore?username=${encodeURIComponent(authUser?.username)}`,
+              `${process.env.API_BASE_URL}/score/getScore?username=${encodeURIComponent(authUser?.username)}`,
             );
             if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
         

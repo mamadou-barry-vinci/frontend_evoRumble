@@ -51,7 +51,7 @@ const Login = () => {
     const username = document.querySelector('#connectUsername').value;
     const password = document.querySelector('#connectPassword').value;
     
-     const url = `/api/auths/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+     const url = `${process.env.API_BASE_URL}/auths/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
      const options = {
       method: 'GET',
